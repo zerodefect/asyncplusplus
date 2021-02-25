@@ -297,8 +297,8 @@ public:
 	// Explicit move constructor for task, required for C++20 and above.
 	shared_task(task<Result> &&task)
     {
-        LIBASYNC_ASSERT(task->internal_task, std::invalid_argument, "Use of empty task object");
-        detail::set_internal_task(*this, std::move(this->internal_task));
+        LIBASYNC_ASSERT(task.internal_task, std::invalid_argument, "Use of empty task object");
+        detail::set_internal_task(*this, std::move(task.internal_task));
     }
 
 	// Get the result of the task
@@ -323,8 +323,8 @@ public:
     // Explicit move-assignment for task, required for C++20 and above.
 	shared_task<Result> &operator=(task<Result> &&rhs)
     {
-        LIBASYNC_ASSERT(rhs->internal_task, std::invalid_argument, "Use of empty task object");
-        detail::set_internal_task(*this, std::move(this->internal_task));
+        LIBASYNC_ASSERT(rhs.internal_task, std::invalid_argument, "Use of empty task object");
+        detail::set_internal_task(*this, std::move(rhs.internal_task));
     }
 };
 
