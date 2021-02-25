@@ -294,6 +294,13 @@ public:
 	// Movable and copyable
 	shared_task() = default;
 
+	// Explicit move constructor for task, required for C++20 and above.
+	shared_task(task<Result> &&task)
+    {
+        LIBASYNC_ASSERT(task->internal_task, std::invalid_argument, "Use of empty task object");
+        detail::set_internal_task(*this, std::move(this->internal_task));
+    }
+
 	// Get the result of the task
 	get_result get() const
 	{
@@ -312,6 +319,13 @@ public:
 	{
 		return then(::async::default_scheduler(), std::forward<Func>(f));
 	}
+
+    // Explicit move-assignment for task, required for C++20 and above.
+	shared_task<Result> &operator=(task<Result> &&rhs)
+    {
+        LIBASYNC_ASSERT(rhs->internal_task, std::invalid_argument, "Use of empty task object");
+        detail::set_internal_task(*this, std::move(this->internal_task));
+    }
 };
 
 // Special task type which can be triggered manually rather than when a function executes.
